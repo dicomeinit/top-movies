@@ -19,12 +19,12 @@
 
    {% for movie in movies %}
   <div class="card" >
-    <div class="front" style="background-image: url('https://flxt.tmsimg.com/assets/p8078163_p_v8_ad.jpg');">
+    <div class="front" style="background-image: url('https://flxt.tmsimg.com/assets/p8078163_p_v8_ad.jpg    ');">
         <p class="large">{{ movie.ranking }}</p>
     </div>
     <div class="back">
       <div>
-    <div class="title">Drive <span class="release_date">({{movie.year}})</span></div>
+    <div class="title">{{ movie.title }} <span class="release_date">({{movie.year}})</span></div>
         <div class="rating">
             <label>{{ movie.rating }}</label>
           <i class="fas fa-star star"></i>
@@ -34,7 +34,7 @@
             {{ movie.description }}
         </p>
 
-        <a href="#" class="button">Update</a>
+        <a href="{{ url_for('rate_movie', id=movie.id) }}" class="button">Update</a>
         <a href="#" class="button delete-button">Delete</a>
 
       </div>
