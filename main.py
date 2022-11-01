@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired
 import requests
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+# app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///movies.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -54,19 +54,28 @@ def rate_movie():
     return render_template("edit.html", movie=movie, form=form)
 
 
-# first_film = Movie(
-#     id=1,
-#     title="The Social Network",
-#     year=2010,
-#     description="Or, I'm Gonna Git You Zuckerberg. Portrayed as an über-ruthless ultra-nerd by Jesse Eisenberg, it's fair to say the Facebook founder came out of David Fincher's social-media drama smelling less of roses than the stuff you grow them in. But it is great drama, expertly wrought by screenwriter Aaron Sorkin, who exploits the story's central paradox (a guy who doesn't get people makes a fortune getting people together online) to supremely juicy effect.",
-#     rating=7.3,
-#     ranking=5,
-#     review="A rich, understated character drama that gleefully exposes the petty playground politics at the centre of one of the internet-era's most bitter court cases.",
-#     img_url="https://flxt.tmsimg.com/assets/p8078163_p_v8_ad.jpg"
+@app.route("/delete")
+def delete_movie():
+    movie_id = request.args.get('id')
+    movie_to_delete = Movie.query.get(movie_id)
+    db.session.delete(movie_to_delete)
+    db.session.commit()
+    return redirect(url_for('home'))
+
+
+# third_film = Movie(
+#     id=3,
+#     title="Up",
+#     year=2009,
+#     description="A lot has been said about the opening to Pete Docter's Pixar masterpiece, and rightly so, wringing tears from the hardest of hearts with a wordless sequence set to Michael Giacchino's lovely, Oscar-winning score that charts the ups and downs of a couple's marriage. Yet while the majority of the film is more of a straight-ahead adventure tale (albeit one with a wacky bird and talking dogs), that doesn't make it any less satisfying. And let's be honest — the story of a man who uses balloons to float his house to a foreign land, accidentally picking up a young wilderness explorer scout as he does, feels perfectly Pixar.",
+#     rating=9.0,
+#     ranking=6,
+#     review="Inspired by his childhood hero, adventurer Charles F. Muntz (Plummer), and the wishes of his late wife Ellie, octogenarian Carl Fredricksen (Asner) uses a bundle of balloons to fly his house to the jungles of Paradise Falls. His problems start when he discovers a stowaway, boy scout Russell (Nagai).",
+#     img_url="https://upload.wikimedia.org/wikipedia/en/0/05/Up_%282009_film%29.jpg"
 # )
 #
 # with app.app_context():
-#     db.session.add(first_film)
+#     db.session.add(third_film)
 #     db.session.commit()
 
 

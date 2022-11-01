@@ -19,7 +19,7 @@
 
    {% for movie in movies %}
   <div class="card" >
-    <div class="front" style="background-image: url('https://flxt.tmsimg.com/assets/p8078163_p_v8_ad.jpg    ');">
+    <div class="front" style="background-image: url('{{movie.img_url}}');">
         <p class="large">{{ movie.ranking }}</p>
     </div>
     <div class="back">
@@ -35,7 +35,7 @@
         </p>
 
         <a href="{{ url_for('rate_movie', id=movie.id) }}" class="button">Update</a>
-        <a href="#" class="button delete-button">Delete</a>
+        <a href="{{ url_for('delete_movie', id=movie.id) }}" class="button delete-button">Delete</a>
 
       </div>
     </div>
