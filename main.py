@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
+import config
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -12,6 +13,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///movies.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Bootstrap(app)
+
+
+MOVIE_DB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie"
+API_KEY = config.api_key
 
 
 class Movie(db.Model):
@@ -70,6 +75,13 @@ def delete_movie():
 @app.route("/add", methods=["GET", "POST"])
 def add_movie():
     form = FindMovieForm()
+
+    if form.validate_on_submit():
+        movie_title = form.title.data
+        response = requests.get(MOVIE_DB_SEARCH_URL, params={"api_key": API_KEY, "query": movie_title})
+        data = response.json()["results"]
+        return render_template("select.html", options=data)
+
     return render_template("add.html", form=form)
 
 
@@ -88,7 +100,6 @@ def add_movie():
 # with app.app_context():
 #     db.session.add(third_film)
 #     db.session.commit()
-
 
 if __name__ == '__main__':
     app.run(debug=True)
